@@ -2,6 +2,7 @@ const Factory = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const mockStore = require("../data/mockStore");
 
 // Strict Email validation regex
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -31,15 +32,6 @@ const DUMMY_HASH = "$2a$10$e84W/3J8BqY6oHqR8K3VXe6hJ4cK5W1tG0F9E8D7C6B5A4z3y2x1w
 // @route   POST /api/auth/register
 const register = async (req, res, next) => {
   try {
-    // 0. Verify Database Connection
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(503).json({
-        success: false,
-        message:
-          "تعذر الاتصال بقاعدة بيانات المستخدمين (MongoDB). يرجى التأكد من تشغيل السيرفر وقاعدة البيانات أو ضبط MONGO_URI.",
-      });
-    }
-
     const {
       factoryName,
       email,
@@ -85,10 +77,15 @@ const register = async (req, res, next) => {
       });
     }
 
-    // 4. Check if factory already exists by email
-    const existingFactory = await Factory.findOne({
-      "contactInfo.email": normalizedEmail,
-    });
+    // 4. Check if factory already exists by email (DB or MockStore)
+    let existingFactory;
+    if (mongoose.connection.readyState === 1) {
+      existingFactory = await Factory.findOne({
+        "contactInfo.email": normalizedEmail,
+      });
+    } else {
+      existingFactory = mockStore.findFactoryByEmail(normalizedEmail);
+    }
 
     if (existingFactory) {
       return res.status(409).json({
@@ -156,32 +153,57 @@ const register = async (req, res, next) => {
       industrialZone: sanitize(location?.industrialZone || ""),
     };
 
-    const newFactory = await Factory.create({
-      factoryName: sanitize(factoryName),
-      taxId: taxId ? sanitize(String(taxId)) : undefined,
-      taxCardImage: {
-        fileUrl: taxCardCheck.url,
-      },
-      commercialRegImage: {
-        fileUrl: commercialRegCheck.url,
-      },
-      industrialRegImage: {
-        fileUrl: industrialRegCheck.url,
-      },
-      industrialActivityId: industrialActivityId || undefined,
-      location: safeLocation,
-      contactInfo: {
-        email: normalizedEmail,
-        phone: phone ? sanitize(String(phone)) : "",
-      },
-      password: hashedPassword,
-      // Security: enforce default unprivileged role & pending status (No user active without Admin Accept)
-      role: "factory",
-      accountStatus: "pending",
-    });
+    let newFactory;
+    if (mongoose.connection.readyState === 1) {
+      newFactory = await Factory.create({
+        factoryName: sanitize(factoryName),
+        taxId: taxId ? sanitize(String(taxId)) : undefined,
+        taxCardImage: {
+          fileUrl: taxCardCheck.url,
+        },
+        commercialRegImage: {
+          fileUrl: commercialRegCheck.url,
+        },
+        industrialRegImage: {
+          fileUrl: industrialRegCheck.url,
+        },
+        industrialActivityId: industrialActivityId || undefined,
+        location: safeLocation,
+        contactInfo: {
+          email: normalizedEmail,
+          phone: phone ? sanitize(String(phone)) : "",
+        },
+        password: hashedPassword,
+        // Security: enforce default unprivileged role & pending status (No user active without Admin Accept)
+        role: "factory",
+        accountStatus: "pending",
+      });
+    } else {
+      newFactory = mockStore.createFactory({
+        factoryName: sanitize(factoryName),
+        taxId: taxId ? sanitize(String(taxId)) : undefined,
+        taxCardImage: {
+          fileUrl: taxCardCheck.url,
+        },
+        commercialRegImage: {
+          fileUrl: commercialRegCheck.url,
+        },
+        industrialRegImage: {
+          fileUrl: industrialRegCheck.url,
+        },
+        location: safeLocation,
+        contactInfo: {
+          email: normalizedEmail,
+          phone: phone ? sanitize(String(phone)) : "",
+        },
+        password: hashedPassword,
+        role: "factory",
+        accountStatus: "pending",
+      });
+    }
 
     // Remove password and internal metadata from response
-    const factoryData = newFactory.toObject();
+    const factoryData = newFactory.toObject ? newFactory.toObject() : { ...newFactory };
     delete factoryData.password;
     delete factoryData.__v;
 
@@ -202,15 +224,6 @@ const register = async (req, res, next) => {
 // @route   POST /api/auth/login
 const login = async (req, res, next) => {
   try {
-    // 0. Verify Database Connection
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(503).json({
-        success: false,
-        message:
-          "تعذر الاتصال بقاعدة بيانات المستخدمين (MongoDB). يرجى التأكد من تشغيل السيرفر وقاعدة البيانات أو ضبط MONGO_URI.",
-      });
-    }
-
     const { email, password } = req.body;
 
     // 1. Strict Type Validations to prevent NoSQL injection
@@ -236,10 +249,15 @@ const login = async (req, res, next) => {
       });
     }
 
-    // 2. Query factory with password explicitly selected
-    const factory = await Factory.findOne({
-      "contactInfo.email": normalizedEmail,
-    }).select("+password");
+    // 2. Query factory (DB or MockStore)
+    let factory;
+    if (mongoose.connection.readyState === 1) {
+      factory = await Factory.findOne({
+        "contactInfo.email": normalizedEmail,
+      }).select("+password");
+    } else {
+      factory = mockStore.findFactoryByEmail(normalizedEmail);
+    }
 
     // 3. Timing Attack Mitigation
     // If user does not exist, run a dummy bcrypt compare to keep response time uniform
@@ -289,7 +307,7 @@ const login = async (req, res, next) => {
     const token = generateToken(factory._id, factory.role);
 
     // Remove password and sensitive metadata from response
-    const factoryData = factory.toObject();
+    const factoryData = factory.toObject ? factory.toObject() : { ...factory };
     delete factoryData.password;
     delete factoryData.__v;
 

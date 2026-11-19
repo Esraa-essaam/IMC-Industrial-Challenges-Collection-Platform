@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 const Factory = require("../models/User");
+const mockStore = require("../data/mockStore");
 
 // Protect routes - Verify JWT token
 const protect = async (req, res, next) => {
@@ -25,7 +27,12 @@ const protect = async (req, res, next) => {
       { algorithms: ["HS256"] }
     );
 
-    const factory = await Factory.findById(decoded.id).select("-password -__v");
+    let factory;
+    if (mongoose.connection.readyState === 1) {
+      factory = await Factory.findById(decoded.id).select("-password -__v");
+    } else {
+      factory = mockStore.findFactoryById(decoded.id);
+    }
 
     if (!factory) {
       const error = new Error("المستخدم المرتبط بهذه الجلسة لم يعد مسجلاً في المنظومة.");

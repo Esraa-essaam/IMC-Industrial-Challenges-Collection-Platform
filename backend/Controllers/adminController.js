@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Factory = require("../models/User");
+const mockStore = require("../data/mockStore");
 
 // @desc    Get all registered facilities for Admin with optional status/search filters
 // @route   GET /api/admin/factories
@@ -7,6 +8,16 @@ const Factory = require("../models/User");
 const getFactories = async (req, res, next) => {
   try {
     const { status, search } = req.query;
+
+    // Use MockStore if DB is not connected (e.g. testing mode)
+    if (mongoose.connection.readyState !== 1) {
+      const factories = mockStore.getFactories(status, search);
+      return res.status(200).json({
+        success: true,
+        count: factories.length,
+        factories,
+      });
+    }
 
     const filter = { role: "factory" };
 
@@ -49,6 +60,14 @@ const getFactories = async (req, res, next) => {
 // @access  Private (Admin only)
 const getStats = async (req, res, next) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      const stats = mockStore.getStats();
+      return res.status(200).json({
+        success: true,
+        stats,
+      });
+    }
+
     const total = await Factory.countDocuments({ role: "factory" });
     const pending = await Factory.countDocuments({
       role: "factory",
@@ -84,6 +103,35 @@ const updateFactoryStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status, auditNotes, rejectionReason } = req.body;
+
+    // Validate target status
+    if (!status || !["pending", "approved", "rejected"].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "حالة الحساب المطلوبة غير صالحة. الحالات المسموحة: pending, approved, rejected",
+      });
+    }
+
+    if (mongoose.connection.readyState !== 1) {
+      const factory = mockStore.updateFactoryStatus(id, status, auditNotes, rejectionReason);
+      if (!factory) {
+        return res.status(404).json({
+          success: false,
+          message: "لم يتم العثور على المنشأة الصناعية المحددة",
+        });
+      }
+      const statusArabic =
+        status === "approved"
+          ? "معتمد وموثق"
+          : status === "rejected"
+          ? "مرفوض"
+          : "قيد المراجعة والاعتماد";
+      return res.status(200).json({
+        success: true,
+        message: `تم تحديث حالة حساب المنشأة بنجاح إلى: ${statusArabic}`,
+        factory,
+      });
+    }
 
     // Validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
