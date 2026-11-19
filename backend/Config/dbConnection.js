@@ -20,6 +20,12 @@ const dbConnection = async () => {
       return;
     }
 
+    // على Vercel: إذا كان الرابط يشير إلى localhost أو 127.0.0.1 فإنه لن يعمل ويجب استخدام قاعدة بيانات سحابية مثل Atlas
+    if (process.env.VERCEL && (uri.includes("127.0.0.1") || uri.includes("localhost"))) {
+      console.warn("⚠️ Vercel Environment Notice: MONGO_URI points to localhost. Please configure a cloud MongoDB Atlas URI in Vercel Settings.");
+      return;
+    }
+
     // تعيين مهلة 5 ثوانٍ للاتصال حتى لا يعلق السيرفر في حال عدم تشغيل خدمة MongoDB محلياً
     await mongoose.connect(uri, {
       serverSelectionTimeoutMS: 5000,

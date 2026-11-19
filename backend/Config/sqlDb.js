@@ -1,4 +1,5 @@
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "../.env") });
 const { Sequelize } = require("sequelize");
 
 /**
@@ -28,6 +29,11 @@ const sequelize = new Sequelize(postgresUri, {
 });
 
 const connectSQL = async () => {
+  if (process.env.VERCEL && (postgresUri.includes("127.0.0.1") || postgresUri.includes("localhost"))) {
+    console.warn("⚠️ Vercel Environment Notice: POSTGRES_URI points to localhost. Skipping SQL connection in serverless cloud.");
+    return false;
+  }
+
   try {
     await sequelize.authenticate();
     console.log("✅ PostgreSQL Database connected successfully (Postgres Engine Active)");

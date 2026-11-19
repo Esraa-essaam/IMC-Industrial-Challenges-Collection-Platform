@@ -10,6 +10,7 @@ const Factory = require("../models/User");
  */
 const seedTestUsers = async () => {
   const uri =
+    process.argv[2] ||
     process.env.MONGO_URI ||
     process.env.DB_URL ||
     "mongodb://127.0.0.1:27017/imc_database";
