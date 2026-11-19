@@ -81,10 +81,12 @@ app.use("/api/requests", requestRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running securely on port ${PORT}`);
-});
+// Start Server (Listen locally; Vercel handles requests serverlessly)
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server is running securely on port ${PORT}`);
+  });
+}
 
 module.exports = app;
