@@ -8,6 +8,7 @@
     "dev": "node --watch app.js",
     "seed": "node seeds/adminSeeder.js",
     "seed:admin": "node seeds/adminSeeder.js",
+    "seed:users": "node seeds/seedTestUsers.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

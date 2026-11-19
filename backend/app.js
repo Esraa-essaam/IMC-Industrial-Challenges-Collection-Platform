@@ -36,8 +36,12 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (e.g. mobile apps, postman, curl) or matched origins
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests with no origin (e.g. mobile apps, postman, curl) or matched origins or any vercel.app preview
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        origin.endsWith(".vercel.app")
+      ) {
         return callback(null, true);
       }
       return callback(new Error("CORS validation failed: Origin not authorized."));
@@ -48,9 +52,9 @@ app.use(
   })
 );
 
-// 4. Security: Limit request body payload size to prevent DoS memory exhaustion
-app.use(express.json({ limit: "50kb" }));
-app.use(express.urlencoded({ extended: true, limit: "50kb" }));
+// 4. Payload limit: Allow up to 25MB for document uploads (Base64 tax cards, registrations)
+app.use(express.json({ limit: "25mb" }));
+app.use(express.urlencoded({ extended: true, limit: "25mb" }));
 
 // 5. Connect to MongoDB & SQL Database
 dbConnection();
@@ -81,10 +85,12 @@ app.use("/api/requests", requestRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-// Start Server
+// Start Server (Only when not in Vercel Serverless environment or test)
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running securely on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== "test" && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server is running securely on port ${PORT}`);
+  });
+}
 
 module.exports = app;

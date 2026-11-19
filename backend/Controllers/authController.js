@@ -1,6 +1,7 @@
 const Factory = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 // Strict Email validation regex
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -30,6 +31,15 @@ const DUMMY_HASH = "$2a$10$e84W/3J8BqY6oHqR8K3VXe6hJ4cK5W1tG0F9E8D7C6B5A4z3y2x1w
 // @route   POST /api/auth/register
 const register = async (req, res, next) => {
   try {
+    // 0. Verify Database Connection
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({
+        success: false,
+        message:
+          "تعذر الاتصال بقاعدة بيانات المستخدمين (MongoDB). يرجى التأكد من تشغيل السيرفر وقاعدة البيانات أو ضبط MONGO_URI.",
+      });
+    }
+
     const {
       factoryName,
       email,
@@ -192,6 +202,15 @@ const register = async (req, res, next) => {
 // @route   POST /api/auth/login
 const login = async (req, res, next) => {
   try {
+    // 0. Verify Database Connection
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({
+        success: false,
+        message:
+          "تعذر الاتصال بقاعدة بيانات المستخدمين (MongoDB). يرجى التأكد من تشغيل السيرفر وقاعدة البيانات أو ضبط MONGO_URI.",
+      });
+    }
+
     const { email, password } = req.body;
 
     // 1. Strict Type Validations to prevent NoSQL injection
