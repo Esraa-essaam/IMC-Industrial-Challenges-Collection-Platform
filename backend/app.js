@@ -79,10 +79,23 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// API Routes
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// API Routes (Mounted on both /api/* and /* to guarantee compatibility with all Vercel internal rewrite behaviors)
 app.use("/api/auth", authRoutes);
+app.use("/auth", authRoutes);
+
 app.use("/api/admin", adminRoutes);
+app.use("/admin", adminRoutes);
+
 app.use("/api/requests", requestRoutes);
+app.use("/requests", requestRoutes);
 
 // 404 & Centralized Error Handler Middlewares
 app.use(notFound);

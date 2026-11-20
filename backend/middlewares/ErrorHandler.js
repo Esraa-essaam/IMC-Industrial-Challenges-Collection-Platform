@@ -29,14 +29,15 @@ const errorHandler = (err, req, res, next) => {
     message = "المعرّف المطلوب غير صالح.";
   }
 
-  // 4. In production, never leak 500 error stack traces or internals
+  // 4. In production, include error details in response for debugging Vercel issues
   if (statusCode >= 500 && process.env.NODE_ENV === "production") {
-    message = "حدث خطأ داخلي في الخادم. يرجى المحاولة لاحقاً.";
+    message = err.message || "حدث خطأ داخلي في الخادم. يرجى المحاولة لاحقاً.";
   }
 
   res.status(statusCode).json({
     success: false,
     message,
+    ...(process.env.VERCEL ? { errorDetail: err.message, stack: err.stack?.split("\n")[1] } : {}),
   });
 };
 

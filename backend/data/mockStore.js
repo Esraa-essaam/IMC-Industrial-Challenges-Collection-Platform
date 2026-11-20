@@ -2,9 +2,9 @@ const bcrypt = require("bcryptjs");
 
 // Pre-computed bcrypt hashes — avoids blocking hashSync() at module load time (critical for Vercel serverless cold start)
 // Password: Admin123!
-const ADMIN_HASH = "$2b$10$nCiyPWQUt05cjNRq1jeQ8e9JchmgobpBXQEO756mbMLLdmjDVPGyG";
+const ADMIN_HASH = "$2b$10$BPmj.sOzJ/tVnMZb5HX1POFczoQ9bzvOfoSc5kdxntXvqfQY3QfHW";
 // Password: User123!
-const USER_HASH = "$2b$10$hSz9uPnsYiJcYyjA/oaEiuftnDxzHJNDk9op6C.FruUBy4R0AcLkO";
+const USER_HASH = "$2b$10$bQmxFSN1pTLpsAKiXLfEieWZKTOMM/R8ZWJCq3lTa19C9KRXmtqsa";
 
 const initialFactories = [
   {
