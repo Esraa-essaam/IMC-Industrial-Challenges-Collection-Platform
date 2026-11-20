@@ -57,8 +57,10 @@ app.use(
 app.use(express.json({ limit: "25mb" }));
 app.use(express.urlencoded({ extended: true, limit: "25mb" }));
 
-// 5. Connect to MongoDB & SQL Database
+// 5. Connect to MongoDB (always try — has its own fallback)
 dbConnection();
+
+// 6. Connect to PostgreSQL (skipped when no remote URI / on Vercel without DB env var)
 initSqlDb();
 
 // Base / Health Check Route
