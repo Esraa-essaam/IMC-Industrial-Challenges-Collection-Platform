@@ -91,7 +91,7 @@ function MainApp() {
             </div>
           </header>
 
-          <main className="main-content">
+          <main className="main-content admin-main-content">
             <AdminPortal activeTab={activeTab} setActiveTab={setActiveTab} />
           </main>
         </div>

@@ -230,6 +230,15 @@ p {
   padding: 0 0 64px;
 }
 
+.main-content.admin-main-content {
+  display: block;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 32px 32px 64px;
+  box-sizing: border-box;
+}
+
 .portal-subview-container {
   max-width: 1440px;
   margin: 0 auto;
@@ -2249,7 +2258,8 @@ input[type="tel"]:focus {
   .profile-cover-body {
     padding: 0 20px 24px;
   }
-  .main-content.portal-main-content {
+  .main-content.portal-main-content,
+  .main-content.admin-main-content {
     padding: 16px 14px 40px;
   }
 }

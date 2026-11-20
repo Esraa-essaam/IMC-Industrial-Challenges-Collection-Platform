@@ -86,7 +86,7 @@ export default function Sidebar({
             type="button"
             className={`rail-nav-btn ${activeItem === 'validation' ? 'active' : ''}`}
             onClick={() => handleNavClick('validation')}
-            aria-label="تدقيق واعتماد المستخدمين (User Validation)"
+            aria-label="تدقيق واعتماد المستخدمين"
           >
             {activeItem === 'validation' && <span className="rail-active-indicator" />}
             <div className="rail-icon-wrapper">
@@ -105,7 +105,7 @@ export default function Sidebar({
                 <polyline points="16 11 18 13 22 9" />
               </svg>
             </div>
-            <span className="rail-tooltip">تدقيق واعتماد المستخدمين (User Validation)</span>
+            <span className="rail-tooltip">تدقيق واعتماد المستخدمين</span>
           </button>
         </nav>
 

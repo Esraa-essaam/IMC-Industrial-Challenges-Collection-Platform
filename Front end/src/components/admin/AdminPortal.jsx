@@ -154,9 +154,9 @@ export default function AdminPortal({ activeTab = 'dashboard', setActiveTab = ()
     const isRejected = factory.accountStatus === 'rejected';
 
     return (
-      <div style={{ width: '100%', maxWidth: '1080px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '22px' }}>
+      <div style={{ width: '100%', maxWidth: '1440px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '22px' }}>
         {/* Navigation & Header */}
-        <div className="dashboard-card" style={{ margin: 0, padding: '24px 28px' }}>
+        <div className="dashboard-card" style={{ margin: 0, padding: '24px 28px', borderRadius: '16px', border: '1.5px solid #E2E8F0' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginBottom: '16px' }}>
             <button
               type="button"
@@ -177,10 +177,6 @@ export default function AdminPortal({ activeTab = 'dashboard', setActiveTab = ()
           </div>
 
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px', flexWrap: 'wrap' }}>
-            <div className="dashboard-logo-badge" title="مركز تحديث الصناعة">
-              <img src="/imc-logo-transparent.png" alt="IMC Logo" className="dashboard-logo-img" />
-            </div>
-
             <div style={{ flex: 1, minWidth: '260px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
                 <span style={{ fontSize: '0.8rem', color: '#0055A5', background: '#eff6ff', padding: '2px 10px', borderRadius: '4px', fontWeight: 700 }}>
@@ -685,48 +681,53 @@ export default function AdminPortal({ activeTab = 'dashboard', setActiveTab = ()
   // =========================================================================
   if (activeTab === 'dashboard') {
     return (
-      <div style={{ width: '100%', maxWidth: '1080px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <div style={{ width: '100%', maxWidth: '1440px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {/* Admin Dashboard Header Card */}
-        <div className="dashboard-card" style={{ margin: 0 }}>
-          <div className="dashboard-header" style={{ alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: 1, flexWrap: 'wrap' }}>
-              <div className="dashboard-logo-badge" title="مركز تحديث الصناعة">
-                <img src="/imc-logo-transparent.png" alt="IMC Logo" className="dashboard-logo-img" />
-              </div>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                  <span
-                    style={{
-                      background: '#FDB813',
-                      color: '#002B54',
-                      fontFamily: 'var(--font-headline)',
-                      fontSize: '0.78rem',
-                      fontWeight: 900,
-                      padding: '3px 10px',
-                      borderRadius: 'var(--radius-sm)',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                    }}
-                  >
-                    لوحة القيادة والمؤشرات | IMC Dashboard
-                  </span>
-                </div>
+        <div
+          className="profile-cover-card"
+          style={{
+            margin: 0,
+            overflow: 'hidden',
+            borderRadius: '16px',
+            border: '1.5px solid #E2E8F0',
+            boxShadow: '0 4px 20px rgba(0, 43, 84, 0.04)',
+          }}
+        >
+          <div
+            className="profile-cover-banner"
+            style={{
+              height: 'auto',
+              minHeight: '130px',
+              padding: '28px 36px',
+              color: '#fff',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              position: 'relative',
+            }}
+          >
+            <div className="profile-banner-mesh"></div>
+            <div className="profile-banner-glow"></div>
 
-                <h1 className="dashboard-factory-title" style={{ fontSize: '1.75rem' }}>
-                  لوحة التحكم والمؤشرات الصناعية
-                </h1>
-                <p className="dashboard-factory-sub">
-                  متابعة إحصائيات المنظومة الرقمية للمنشآت الصناعية المسجلة
-                </p>
-              </div>
+            <div style={{ position: 'relative', zIndex: 2 }}>
+              <h1
+                style={{
+                  fontFamily: 'var(--font-headline)',
+                  margin: 0,
+                  fontSize: '1.75rem',
+                  fontWeight: 800,
+                  color: '#ffffff',
+                }}
+              >
+                لوحة التحكم والمؤشرات الصناعية
+              </h1>
             </div>
           </div>
 
           {/* Stats Summary Bar (الجزء المطلوب فقط في الصفحة الرئيسية) */}
           <div
             style={{
-              padding: '20px 28px',
+              padding: '24px 36px',
               background: 'var(--white)',
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -893,7 +894,7 @@ export default function AdminPortal({ activeTab = 'dashboard', setActiveTab = ()
               gap: '8px',
             }}
           >
-            <span>الانتقال إلى تدقيق واعتماد المستخدمين (User Validation)</span>
+            <span>الانتقال إلى تدقيق واعتماد المستخدمين</span>
             <span style={{ transform: 'scaleX(-1)', display: 'inline-block' }}>➔</span>
           </button>
         </div>
@@ -905,85 +906,136 @@ export default function AdminPortal({ activeTab = 'dashboard', setActiveTab = ()
   // VIEW 3: USER VALIDATION VIEW (سجل المنشآت والتدقيق المباشر لكافة المستخدمين المسجلين)
   // =========================================================================
   return (
-    <div style={{ width: '100%', maxWidth: '1080px', margin: '0 auto' }}>
-      {/* Admin Portal Header Card */}
-      <div className="dashboard-card" style={{ marginBottom: '24px' }}>
-        <div className="dashboard-header" style={{ alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: 1, flexWrap: 'wrap' }}>
-            <div className="dashboard-logo-badge" title="مركز تحديث الصناعة">
-              <img src="/imc-logo-transparent.png" alt="IMC Logo" className="dashboard-logo-img" />
-            </div>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                <span
-                  style={{
-                    background: '#FDB813',
-                    color: '#002B54',
-                    fontFamily: 'var(--font-headline)',
-                    fontSize: '0.78rem',
-                    fontWeight: 900,
-                    padding: '3px 10px',
-                    borderRadius: 'var(--radius-sm)',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                  }}
-                >
-                  اعتماد المنشآت | User Validation
-                </span>
-              </div>
+    <div style={{ width: '100%', maxWidth: '1440px', margin: '0 auto' }}>
+      {/* Admin Portal Main Card (Matching Profile / Form Dimensions & Style) */}
+      <div
+        className="profile-cover-card"
+        style={{
+          width: '100%',
+          margin: '0 auto 32px',
+          padding: 0,
+          overflow: 'hidden',
+          borderRadius: '16px',
+          border: '1.5px solid #E2E8F0',
+          boxShadow: '0 4px 20px rgba(0, 43, 84, 0.04)',
+        }}
+      >
+        {/* Cover Banner (Matching Form Header in Image 2) */}
+        <div
+          className="profile-cover-banner"
+          style={{
+            height: 'auto',
+            minHeight: '145px',
+            padding: '28px 36px',
+            color: '#fff',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            gap: '20px',
+            position: 'relative',
+          }}
+        >
+          <div className="profile-banner-mesh"></div>
+          <div className="profile-banner-glow"></div>
 
-              <h1 className="dashboard-factory-title" style={{ fontSize: '1.75rem' }}>
-                تدقيق واعتماد المستخدمين (User Validation)
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '4px',
+              flexWrap: 'wrap',
+              gap: '14px',
+              position: 'relative',
+              zIndex: 2,
+            }}
+          >
+            <div>
+              <h1
+                style={{
+                  fontFamily: 'var(--font-headline)',
+                  margin: 0,
+                  fontSize: '1.75rem',
+                  fontWeight: 800,
+                  color: '#ffffff',
+                }}
+              >
+                تدقيق واعتماد المستخدمين
               </h1>
-              <p className="dashboard-factory-sub">
-                الاطلاع على كافة المنشآت والمستخدمين المسجلين عبر المنصة، فحص المستندات الرسمية، وتفعيل أو رفض الحسابات
-              </p>
             </div>
           </div>
-        </div>
 
-        {/* Toolbar: Search and Filter Tabs */}
-        <div style={{ padding: '18px 28px', background: '#FAFBFC', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-          {/* Status Tabs */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--neutral-100)', padding: '3px', borderRadius: 'var(--radius-full)' }}>
+          {/* Stepper Progress Style Filter Tabs */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              position: 'relative',
+              zIndex: 2,
+              flexWrap: 'wrap',
+            }}
+          >
             <button
               type="button"
               onClick={() => setActiveFilter('')}
-              className="btn"
               style={{
-                padding: '6px 14px',
-                fontSize: '0.8rem',
-                borderRadius: 'var(--radius-full)',
-                background: activeFilter === '' ? 'var(--blue-900)' : 'transparent',
-                color: activeFilter === '' ? '#fff' : 'var(--neutral-700)',
+                padding: '8px 18px',
+                borderRadius: '9999px',
+                border: 'none',
+                background: activeFilter === '' ? '#FDB813' : 'rgba(255,255,255,0.15)',
+                color: activeFilter === '' ? '#002B54' : '#fff',
+                fontWeight: 800,
+                fontSize: '0.85rem',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.2s',
+                fontFamily: 'var(--font-headline)',
               }}
             >
-              جميع المنشآت ({stats.total})
+              <span>جميع المنشآت</span>
+              <span
+                style={{
+                  background: activeFilter === '' ? '#002B54' : 'rgba(255,255,255,0.25)',
+                  color: '#fff',
+                  padding: '2px 8px',
+                  borderRadius: '12px',
+                  fontSize: '0.75rem',
+                  fontWeight: 800,
+                }}
+              >
+                {stats.total}
+              </span>
             </button>
+
             <button
               type="button"
               onClick={() => setActiveFilter('pending')}
-              className="btn"
               style={{
-                padding: '6px 16px',
-                fontSize: '0.8rem',
-                borderRadius: 'var(--radius-full)',
-                background: activeFilter === 'pending' ? 'var(--yellow-500)' : 'transparent',
-                color: activeFilter === 'pending' ? 'var(--blue-950)' : 'var(--neutral-700)',
-                fontWeight: activeFilter === 'pending' ? 800 : 700,
+                padding: '8px 18px',
+                borderRadius: '9999px',
+                border: 'none',
+                background: activeFilter === 'pending' ? '#FDB813' : 'rgba(255,255,255,0.15)',
+                color: activeFilter === 'pending' ? '#002B54' : '#fff',
+                fontWeight: 800,
+                fontSize: '0.85rem',
+                cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '6px',
+                gap: '8px',
+                transition: 'all 0.2s',
+                fontFamily: 'var(--font-headline)',
               }}
             >
-              <span>🛡️ فاحص المنشآت والاعتماد (Admin Checker)</span>
+              <span>🛡️ فاحص المنشآت والاعتماد</span>
               <span
                 style={{
-                  background: activeFilter === 'pending' ? '#002B54' : '#E2E8F0',
-                  color: activeFilter === 'pending' ? '#FFFFFF' : '#334155',
-                  padding: '1px 7px',
-                  borderRadius: '10px',
+                  background: activeFilter === 'pending' ? '#002B54' : '#FDB813',
+                  color: activeFilter === 'pending' ? '#fff' : '#002B54',
+                  padding: '2px 8px',
+                  borderRadius: '12px',
                   fontSize: '0.75rem',
                   fontWeight: 800,
                 }}
@@ -991,39 +1043,95 @@ export default function AdminPortal({ activeTab = 'dashboard', setActiveTab = ()
                 {stats.pending}
               </span>
             </button>
+
             <button
               type="button"
               onClick={() => setActiveFilter('approved')}
-              className="btn"
               style={{
-                padding: '6px 14px',
-                fontSize: '0.8rem',
-                borderRadius: 'var(--radius-full)',
-                background: activeFilter === 'approved' ? 'var(--success)' : 'transparent',
-                color: activeFilter === 'approved' ? '#fff' : 'var(--neutral-700)',
+                padding: '8px 18px',
+                borderRadius: '9999px',
+                border: 'none',
+                background: activeFilter === 'approved' ? '#10b981' : 'rgba(255,255,255,0.15)',
+                color: '#fff',
+                fontWeight: 800,
+                fontSize: '0.85rem',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.2s',
+                fontFamily: 'var(--font-headline)',
               }}
             >
-              المعتمدة ({stats.approved})
+              <span>المعتمدة</span>
+              <span
+                style={{
+                  background: 'rgba(255,255,255,0.25)',
+                  color: '#fff',
+                  padding: '2px 8px',
+                  borderRadius: '12px',
+                  fontSize: '0.75rem',
+                  fontWeight: 800,
+                }}
+              >
+                {stats.approved}
+              </span>
             </button>
+
             <button
               type="button"
               onClick={() => setActiveFilter('rejected')}
-              className="btn"
               style={{
-                padding: '6px 14px',
-                fontSize: '0.8rem',
-                borderRadius: 'var(--radius-full)',
-                background: activeFilter === 'rejected' ? 'var(--danger)' : 'transparent',
-                color: activeFilter === 'rejected' ? '#fff' : 'var(--neutral-700)',
+                padding: '8px 18px',
+                borderRadius: '9999px',
+                border: 'none',
+                background: activeFilter === 'rejected' ? '#ef4444' : 'rgba(255,255,255,0.15)',
+                color: '#fff',
+                fontWeight: 800,
+                fontSize: '0.85rem',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.2s',
+                fontFamily: 'var(--font-headline)',
               }}
             >
-              المرفوضة ({stats.rejected})
+              <span>المرفوضة</span>
+              <span
+                style={{
+                  background: 'rgba(255,255,255,0.25)',
+                  color: '#fff',
+                  padding: '2px 8px',
+                  borderRadius: '12px',
+                  fontSize: '0.75rem',
+                  fontWeight: 800,
+                }}
+              >
+                {stats.rejected}
+              </span>
             </button>
           </div>
+        </div>
 
-          {/* Search Box */}
-          <form onSubmit={handleSearchSubmit} style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: '1', maxWidth: '380px' }}>
-            <div className="input-container" style={{ flex: 1 }}>
+        {/* Toolbar: Search Box */}
+        <div
+          style={{
+            padding: '18px 36px',
+            background: '#FAFBFC',
+            borderBottom: '1px solid #E2E8F0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '16px',
+            flexWrap: 'wrap',
+          }}
+        >
+          <form
+            onSubmit={handleSearchSubmit}
+            style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: '1', maxWidth: '420px' }}
+          >
+            <div className="input-container" style={{ flex: 1, margin: 0 }}>
               <span className="input-icon">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8" />
@@ -1036,17 +1144,21 @@ export default function AdminPortal({ activeTab = 'dashboard', setActiveTab = ()
                 placeholder="بحث بالاسم، السجل الضريبي، أو الهاتف..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ fontSize: '0.825rem' }}
+                style={{ fontSize: '0.85rem' }}
               />
             </div>
-            <button type="submit" className="btn btn-primary" style={{ padding: '8px 14px', fontSize: '0.825rem' }}>
+            <button type="submit" className="btn btn-primary" style={{ padding: '8px 18px', fontSize: '0.85rem' }}>
               بحث
             </button>
           </form>
+
+          <span style={{ fontSize: '0.85rem', color: '#64748B', fontWeight: 700 }}>
+            عدد المنشآت: {factories.length}
+          </span>
         </div>
 
         {/* Content Body / Facilities List */}
-        <div className="dashboard-body" style={{ padding: '28px' }}>
+        <div className="dashboard-body" style={{ padding: '36px' }}>
           <Alert type={toastMessage.type} message={toastMessage.text} />
 
           {activeFilter === 'pending' && (

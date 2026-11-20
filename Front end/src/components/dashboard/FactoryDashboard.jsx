@@ -67,15 +67,6 @@ export default function FactoryDashboard({
               ></span>
               حالة الحساب: {statusLabel}
             </span>
-
-            {/* Official IMC Logo Watermark */}
-            <div style={{ opacity: 0.95, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.3))' }}>
-              <img
-                src="/imc-logo-transparent.png"
-                alt="IMC"
-                style={{ height: '36px', width: 'auto', display: 'block' }}
-              />
-            </div>
           </div>
         </div>
 
